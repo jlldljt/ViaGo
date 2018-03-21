@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Drawings">
+      <UniqueIdentifier>{4974e81c-23e1-4356-a8a6-f0fa58797dee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32">
+      <UniqueIdentifier>{339917b1-9af3-4fde-b846-beab71183522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawings\Boards">
+      <UniqueIdentifier>{67f0b50d-8537-4bc8-9e94-e366305d390e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawings\Tools">
+      <UniqueIdentifier>{7b648698-3717-46e7-83f8-657331ef13bc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ImageButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonBase.h">
+      <Filter>Drawings</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawingBase.h">
+      <Filter>Drawings</Filter>
+    </ClInclude>
+    <ClInclude Include="GdiPlusTools.h">
+      <Filter>Drawings\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawingTools.h">
+      <Filter>Drawings\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="GdiTools.h">
+      <Filter>Drawings\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawingBoard.h">
+      <Filter>Drawings\Boards</Filter>
+    </ClInclude>
+    <ClInclude Include="HwndBoard.h">
+      <Filter>Drawings\Boards</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowBsp.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawingFactory.h">
+      <Filter>Drawings</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationButton.h">
+      <Filter>Drawings</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonBase.cpp">
+      <Filter>Drawings</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawingBase.cpp">
+      <Filter>Drawings</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawingTools.cpp">
+      <Filter>Drawings\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="GdiPlusTools.cpp">
+      <Filter>Drawings\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="GdiTools.cpp">
+      <Filter>Drawings\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawingBoard.cpp">
+      <Filter>Drawings\Boards</Filter>
+    </ClCompile>
+    <ClCompile Include="HwndBoard.cpp">
+      <Filter>Drawings\Boards</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowBsp.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawingFactory.cpp">
+      <Filter>Drawings</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationButton.cpp">
+      <Filter>Drawings</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
+    <None Include="jpg2.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Text.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Win32Lib.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\Public\Pictures\Sample Pictures\5.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

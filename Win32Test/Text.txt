@@ -1,0 +1,6 @@
+1..mak文件的执行，需要使用vs的nmake或者其他make.exe工具。在DOS中nmake ***.mak
+2.rc文件可以完全手工写，感觉和xml文件其实是一个道理
+3.开发win32程序，唯一必须包含的就是<windows.h>
+4.学习了win32程序的创建，以及rc文件的编辑，用rc实现了about对话框和目录的手工添加，配合DialogBox来显示
+5.这都是一些最基层的API了，现在的mfc或者Windows已经有很多ex的API版本了，更安全更强大
+6.来自《深入浅出MFC》第一章

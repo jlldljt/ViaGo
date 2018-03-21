@@ -1,0 +1,28 @@
+使用方法：
+1、win32窗口绑定
+1.1、头文件
+#include"win32.h"
+#include "DrawingFactory.h"
+1.2、全局win32窗口类
+CWindowBsp win32;
+并调用CreateBoard生成窗口
+1.3、全局窗口管理类变量
+CDrawingFactory win_manage;
+并调用Bind绑定上一步返回的HWND
+1.4、初始化回调
+win32.callback_->windows_message = Event;
+注意event必须是全局函数，并且在event中调用win_manage.Event
+1.5、此时可以进入win32消息循环
+win32.GameMsgLoop()
+1.6、窗口销毁时调用win32.DestoryBoard
+2、控件的生成
+2.1、控件树预览
+               ButtonBase -> ImageButton
+DrawingBase -> MovingBase -> MovingImage
+               ……/自定义控件
+采用了虚继承机制，factory中使用DrawingBase可以new出后续的子类，并且有同一化的操作
+DrawingBase将一些基础的函数实现，方便了后续继承的子类无需再实现
+2.2、DrawingBase
+DrawingBase关联了两个基类，一个是画板，一个是工具，使用画板进行窗口刷新，使用工具进行绘图。
+画板有子类HwndBoard可以绑定窗口，并实现了paint功能
+工具有子类GDI、GDI+，绑定画板之后，可以进行绘图操作
