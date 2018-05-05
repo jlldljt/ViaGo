@@ -12,6 +12,26 @@ CDrawingFactory::CDrawingFactory()
 CDrawingFactory::~CDrawingFactory()
 {
 }
+//更新放大系数
+//org_rect 未放大的图像大小
+//dst_rect 放大后图像
+int CDrawingFactory::UpdateTimes(RECT* org_rect, RECT* dst_rect)
+{
+  times_x_ = (double)(org_rect->right) / (double)(dst_rect->right);
+  times_y_ = (double)(org_rect->bottom) / (double)(dst_rect->bottom);
+  return 0;
+}
+//得到放大后的rect
+//in_rect 未放大的图像大小
+//out_rect 放大后，由于精度问题，out rect略大于实际窗口+1
+int CDrawingFactory::GetTimesRect(RECT * in_rect, RECT * out_rect)
+{
+  out_rect->top = in_rect->top / times_y_ - 1;//防止计数误差导致刷新区域变小而留下残影，扩大一个像素
+  out_rect->bottom = in_rect->bottom / times_y_ + 1;
+  out_rect->left = in_rect->left / times_x_ - 1;
+  out_rect->right = in_rect->right / times_x_ + 1;
+  return 0;
+}
 
 int CDrawingFactory::Bind(void * object)
 {
@@ -62,7 +82,7 @@ CDrawingBase* CDrawingFactory::Create(RECT rect, CreateType type)
   drawings_.push_back(base);
   return base;
 }
-
+//仅用在windows消息函数中
 LRESULT CDrawingFactory::Event(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   LRESULT ret = FALSE;
@@ -173,8 +193,9 @@ LRESULT CDrawingFactory::Event(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
       HDC hwnd_hdc;
       hwnd_hdc = GetDC(hwnd);
       GetClientRect(hwnd, &hwnd_rect);
-      times_x_ = (double)(rect_.right) / (double)(hwnd_rect.right);
-      times_y_ = (double)(rect_.bottom) / (double)(hwnd_rect.bottom);
+      //times_x_ = (double)(rect_.right) / (double)(hwnd_rect.right);
+      //times_y_ = (double)(rect_.bottom) / (double)(hwnd_rect.bottom);
+      UpdateTimes(&rect_, &hwnd_rect);
       board_->Paint(hwnd_hdc, hwnd_rect);
       ReleaseDC(hwnd, hwnd_hdc);
     }
@@ -190,16 +211,17 @@ LRESULT CDrawingFactory::Event(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
     }
 
     if (param.event == CDrawingBase::EnumEvent::INVALID) {
-      rect.top = rect.top / times_y_ - 1;//防止计数误差导致刷新区域变小而留下残影，扩大一个像素
-      rect.bottom = rect.bottom / times_y_ + 1;
-      rect.left = rect.left / times_x_ - 1;
-      rect.right = rect.right / times_x_ + 1;
+      //rect.top = rect.top / times_y_ - 1;//防止计数误差导致刷新区域变小而留下残影，扩大一个像素
+      //rect.bottom = rect.bottom / times_y_ + 1;
+      //rect.left = rect.left / times_x_ - 1;
+      //rect.right = rect.right / times_x_ + 1;
+      GetTimesRect(&rect, &rect);
       InvalidateRect(hwnd, &rect, 0);
     }
   }
   return ret;
 }
-
+//TODO ：这个函数应该由用户编写？或者这个是具体按钮缺省的，附加的在外面编写
 void CDrawingFactory::Animation(DWORD tick)
 {
   //DWORD		tPre = 0, tNow = 0, tTim;
@@ -219,6 +241,7 @@ void CDrawingFactory::Animation(DWORD tick)
     RECT temp_rect = { 0,0,0,0 };
     base = *it;
     base->Animation(&temp_rect);
+    GetTimesRect(&temp_rect, &temp_rect);
     UnionRect(&update_rect, &update_rect, &temp_rect);//合并刷新区域
   }
   InvalidateRect(hwnd_, &update_rect, 0);

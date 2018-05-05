@@ -84,7 +84,7 @@ LRESULT Event(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
 //
 //}
 void Animation(DWORD tick) {
-  wins.Animation(tick);
+  wins.Animation(tick);//缺省动作
 }
 
 /************************************************************************/
@@ -127,6 +127,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 RECT uprect = { 50, 10, 100, 50 };
   
   main_hwnd = windowbsp.CreateBoard(hInstance, L"hello act", rect, NULL);
+  //windowbsp.ChangeIcon(hInstance, main_hwnd, L"pic/9.ico");
  //为了消息和动画
   
   //创建画布及元素
@@ -136,7 +137,7 @@ RECT uprect = { 50, 10, 100, 50 };
   for (int i = 0; i < 10; i++) {
     InflateRect(&uprect, 1, 1);
     CDrawingBase *object = wins.Create(uprect, CDrawingFactory::_BUTTON_);
-    TCHAR* img = TEXT("C:/Users/Public/Pictures/Sample Pictures/3.PNG");
+    TCHAR* img = TEXT("pic/3.PNG");
     object->tools_->AddImage(img);
     RECT tmp_rect = {0, 0, uprect.right - uprect.left, uprect.bottom - uprect.top};
     object->tools_->StretchBlt(tmp_rect, 0);
@@ -144,14 +145,16 @@ RECT uprect = { 50, 10, 100, 50 };
   }
 
   CDrawingBase *object = wins.Create(uprect, CDrawingFactory::_ANIMATION_BUTTON_);
-  TCHAR* img = TEXT("C:/Users/Public/Pictures/Sample Pictures/3.PNG");
+  TCHAR* img = TEXT("pic/3.PNG");
+  object->tools_->AddImage(img);
+  img = TEXT("pic/5.PNG");
   object->tools_->AddImage(img);
   RECT tmp_rect = { 0, 0, uprect.right - uprect.left, uprect.bottom - uprect.top };
   object->tools_->StretchBlt(tmp_rect, 0);//临时，在这里把img绘制到board上，只绘制一次即可，由于自带缓存，无需每次paint都绘
   object->board_->EnableTransparent(true);
 
-  windowbsp.callback_.cartoon = Animation;
-  windowbsp.callback_.windows_message = Event;
+  windowbsp.callback_.cartoon = Animation;//用户定义函数？
+  windowbsp.callback_.windows_message = Event;//用户定义函数？
 
   
   InvalidateRect(main_hwnd, &uprect, 0);

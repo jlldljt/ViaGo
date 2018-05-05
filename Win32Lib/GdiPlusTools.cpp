@@ -8,6 +8,8 @@
 
 CGdiPlusTools::CGdiPlusTools()
 {
+  img_num_ = 0;
+  current_img_ = 0;
 }
 
 CGdiPlusTools::CGdiPlusTools(void * board)
@@ -150,7 +152,7 @@ int CGdiPlusTools::AddImage(TCHAR * path)
   }
   imgs_.push_back(img);
   imgs_bg_.push_back(bImg);
-
+  img_num_++;
   return 0;
 }
 
@@ -181,6 +183,9 @@ int CGdiPlusTools::StretchBlt(RECT dest, RECT src,int no)
     src.right - src.left,
     src.bottom - src.top, 
     SRCPAINT);//贴动作前景
+
+  current_img_ = no;
+
   return 0;
 }
 
@@ -208,5 +213,8 @@ int CGdiPlusTools::StretchBlt(RECT dest, int no)
     imgs_[no]->GetWidth(),
     imgs_[no]->GetHeight(),
     SRCPAINT);//贴动作前景
+
+  current_img_ = no;
+
   return 0;
 }

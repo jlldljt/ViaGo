@@ -18,6 +18,16 @@ CDrawingBase::~CDrawingBase()
 {
 }
 
+int CDrawingBase::AddImage(TCHAR * path)
+{
+  return tools_->AddImage(path);
+}
+
+int CDrawingBase::ShowImage(int no)
+{
+  return tools_->StretchBlt(board_->GetRect(), no);//TODO£ºÎ´µ÷ÊÔ
+}
+
 int CDrawingBase::EventBase(EventParam param)
 {
   return 0;

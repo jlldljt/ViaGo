@@ -54,5 +54,6 @@ public:
   void Cartoon(DWORD tick);//能够控制控件的一些动画，必须在父窗口定时器或msg loop中调用，并传入间隔
   void WindowMsgLoop();
   void GameMsgLoop();
+  bool ChangeIcon(HINSTANCE hInstance, HWND hWnd, LPCWSTR lpPath);
 };
 

@@ -19,11 +19,17 @@ public:
     _BUTTON_,
     _ANIMATION_BUTTON_,
   };
+private:
+  //更新放大系数
+  int UpdateTimes(RECT* org_rect, RECT* dst_rect);
+  //得到放大后的rect
+  int GetTimesRect(RECT * in_rect, RECT *out_rect);
 public:
   HWND hwnd_;//窗口
   RECT rect_;//窗口大小
   HDC hdc_;//窗口dc
   double times_x_, times_y_;
+
   //TODO:ADASDFFASDF
   CDrawingBoard *board_;//画板，控件都画到这里
 

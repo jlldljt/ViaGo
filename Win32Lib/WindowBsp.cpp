@@ -36,9 +36,9 @@ HWND CWindowBsp::CreateWin32Window(
   wndClass.cbClsExtra = 0;								//窗口类的附加内存，取0就可以了
   wndClass.cbWndExtra = 0;							//窗口的附加内存，依然取0就行了
   wndClass.hInstance = hInstance;						//指定包含窗口过程的程序的实例句柄。
- wndClass.hIcon = (HICON)::LoadImage(NULL, L"5.jpg", IMAGE_BITMAP,0,0,LR_DEFAULTSIZE|LR_LOADFROMFILE);  //本地加载自定义ico图标//LoadIcon(NULL, IDI_APPLICATION);
+ //wndClass.hIcon = (HICON)::LoadImage(NULL, L"5.jpg", IMAGE_BITMAP,0,0,LR_DEFAULTSIZE|LR_LOADFROMFILE);  //本地加载自定义ico图标//LoadIcon(NULL, IDI_APPLICATION);
  
-  //wndClass.hIcon = //(HICON)::LoadImage(NULL,L"icon.ico",IMAGE_ICON,0,0,LR_DEFAULTSIZE|LR_LOADFROMFILE);  //本地加载自定义ico图标//LoadIcon(NULL, IDI_APPLICATION);
+  wndClass.hIcon = (HICON)::LoadImage(NULL,L"pic/5.ico",IMAGE_ICON,0,0,LR_DEFAULTSIZE|LR_LOADFROMFILE);  //本地加载自定义ico图标//LoadIcon(NULL, IDI_APPLICATION);
   wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);    //指定窗口类的光标句柄。
   wndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);  //为hbrBackground成员指定一个白色画刷句柄	
   wndClass.lpszMenuName = NULL;						//用一个以空终止的字符串，指定菜单资源的名字。
@@ -305,4 +305,16 @@ void CWindowBsp::GameMsgLoop(/*REFRESHFN refreshFn*/) {
     }
 
   }
+}
+//无效
+bool CWindowBsp::ChangeIcon(HINSTANCE hInstance, HWND hWnd,
+  LPCWSTR lpPath)
+{
+  assert(hInstance && hWnd && lpPath);
+  HICON m_hIcon = LoadIcon(hInstance, lpPath);
+  SetClassLong(hWnd, GCL_HICON, (LONG)m_hIcon);
+  SetClassLong(hWnd, GCL_HICONSM, (LONG)m_hIcon);
+  SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)(m_hIcon));
+  SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)(m_hIcon));
+  return true;
 }
