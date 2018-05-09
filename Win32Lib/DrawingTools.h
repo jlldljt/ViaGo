@@ -22,5 +22,8 @@ public:
   virtual int AddImage(TCHAR* path) = 0;
   virtual int StretchBlt(RECT dest, RECT src, int no) = 0;
   virtual int StretchBlt(RECT dest, int no) = 0;
+  virtual int GetBltedImageNo() = 0;
+  virtual int GetImageNum() = 0;
+  virtual int EraseBoard(RECT dest) = 0;
 };
 

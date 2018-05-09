@@ -25,8 +25,30 @@ int CDrawingBase::AddImage(TCHAR * path)
 
 int CDrawingBase::ShowImage(int no)
 {
-  return tools_->StretchBlt(board_->GetRect(), no);//TODO£ºÎ´µ÷ÊÔ
+  RECT board_rect = board_->GetRect();
+  RECT tmp_rect = { 0, 0, board_rect.right - board_rect.left, board_rect.bottom - board_rect.top };
+  tools_->EraseBoard(tmp_rect);
+
+  return tools_->StretchBlt(tmp_rect, no);
 }
+
+int CDrawingBase::ShowNextImage()
+{
+  int num = tools_->GetImageNum();
+  int current_no = tools_ ->GetBltedImageNo();
+  if (++current_no < num) {
+    ShowImage(current_no);
+  }
+  else {
+    ShowImage(0);
+  }
+  return 0;
+}
+
+//int CDrawingBase::GetShowedImageNo()
+//{
+//  return tools_->GetBltedImageNo();
+//}
 
 int CDrawingBase::EventBase(EventParam param)
 {

@@ -30,7 +30,7 @@ public:
   //img相关操作
 private:
   int img_num_;//图数量
-  int current_img_;//当前图
+  int blted_img_;//当前图
   std::vector<CImage*> imgs_;//通过Add IMAGE函数添加CDrawingBase元素，带*是模板多态
   std::vector<CImage*> imgs_bg_;
   std::vector<CImage*>::iterator it_;
@@ -38,5 +38,8 @@ public:
   int AddImage(TCHAR* path);
   int StretchBlt(RECT dest, RECT src, int no);
   int StretchBlt(RECT dest, int no);
+  int GetBltedImageNo();
+  int GetImageNum();
+  int EraseBoard(RECT dest);
 };
 

@@ -221,7 +221,7 @@ LRESULT CDrawingFactory::Event(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
   }
   return ret;
 }
-//TODO ：这个函数应该由用户编写？或者这个是具体按钮缺省的，附加的在外面编写
+//TODO ：这个函数应该由用户编写？或者这个是具体按钮缺省的，附加的在外面编写。base->Animation这里面要加入用户函数的调用
 void CDrawingFactory::Animation(DWORD tick)
 {
   //DWORD		tPre = 0, tNow = 0, tTim;

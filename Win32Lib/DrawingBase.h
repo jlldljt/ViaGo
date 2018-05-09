@@ -42,6 +42,8 @@ public:
   //tool封装，方便调用
   int AddImage(TCHAR* path);
   int ShowImage(int no);
+  int ShowNextImage();
+ // int GetShowedImageNo();
   //用于重载的消息处理接口
   int EventBase(EventParam param);
   //用于重载的绘制接口

@@ -9,7 +9,7 @@
 CGdiPlusTools::CGdiPlusTools()
 {
   img_num_ = 0;
-  current_img_ = 0;
+  blted_img_ = 0;
 }
 
 CGdiPlusTools::CGdiPlusTools(void * board)
@@ -184,7 +184,7 @@ int CGdiPlusTools::StretchBlt(RECT dest, RECT src,int no)
     src.bottom - src.top, 
     SRCPAINT);//贴动作前景
 
-  current_img_ = no;
+  blted_img_ = no;
 
   return 0;
 }
@@ -214,7 +214,23 @@ int CGdiPlusTools::StretchBlt(RECT dest, int no)
     imgs_[no]->GetHeight(),
     SRCPAINT);//贴动作前景
 
-  current_img_ = no;
+  blted_img_ = no;
 
+  return 0;
+}
+
+int CGdiPlusTools::GetBltedImageNo()
+{
+  return blted_img_;
+}
+
+int CGdiPlusTools::GetImageNum()
+{
+  return img_num_;
+}
+//TODO：增加颜色选择
+int CGdiPlusTools::EraseBoard(RECT dest)
+{
+  FillRect((HDC)board_, &dest, (HBRUSH)GetStockObject(WHITE_BRUSH));
   return 0;
 }

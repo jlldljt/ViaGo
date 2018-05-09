@@ -91,6 +91,7 @@ int CHwndBoard::Draw()
 {
   return 0;
 }
+
 //
 int CHwndBoard::Paint(RECT update_rect)
 {

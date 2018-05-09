@@ -1,4 +1,5 @@
 //创建绘制画板，比如hwnd 的 hdc，或者 image的data等
+//画板是窗口中的一块区域rect_指定
 //针对绘制区域的部分操作放在这里实现
 #pragma once
 #include <Windows.h>
@@ -14,10 +15,10 @@ public:
   CDrawingBoard();
   ~CDrawingBoard() {};
 
-
-  RECT rect_;
-  RECT master_rect_;
-  bool transparent_;
+  
+  RECT rect_;/*画板位置*/
+  RECT master_rect_;/*窗口位置*/
+  bool transparent_;/*透明选项*/
 
   virtual void EnableTransparent(bool enable);
 
