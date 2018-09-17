@@ -140,19 +140,25 @@ RECT uprect = { 50, 10, 100, 50 };
     TCHAR* img = TEXT("pic/3.PNG");
     //object->tools_->AddImage(img);
     object->AddImage(img);
-    RECT tmp_rect = {0, 0, uprect.right - uprect.left, uprect.bottom - uprect.top};
-    object->tools_->StretchBlt(tmp_rect, 0);
-    object->board_->EnableTransparent(true);
+    //RECT tmp_rect = {0, 0, uprect.right - uprect.left, uprect.bottom - uprect.top};
+    //object->tools_->StretchBlt(tmp_rect, 0);
+    //object->board_->EnableTransparent(true);
+
+    object->ShowImage(0);
+    object->EnableTransparent(true);
   }
 
   CDrawingBase *object = wins.Create(uprect, CDrawingFactory::_ANIMATION_BUTTON_);
   TCHAR* img = TEXT("pic/3.PNG");
-  object->tools_->AddImage(img);
+  object->AddImage(img);
   img = TEXT("pic/5.PNG");
-  object->tools_->AddImage(img);
-  RECT tmp_rect = { 0, 0, uprect.right - uprect.left, uprect.bottom - uprect.top };
-  object->tools_->StretchBlt(tmp_rect, 0);//临时，在这里把img绘制到board上，只绘制一次即可，由于自带缓存，无需每次paint都绘
-  object->board_->EnableTransparent(true);
+  object->AddImage(img);
+  //RECT tmp_rect = { 0, 0, uprect.right - uprect.left, uprect.bottom - uprect.top };
+  //object->tools_->StretchBlt(tmp_rect, 0);//临时，在这里把img绘制到board上，只绘制一次即可，由于自带缓存，无需每次paint都绘
+  //object->board_->EnableTransparent(true);
+
+  object->ShowImage(0);
+  object->EnableTransparent(false);
 
   windowbsp.callback_.cartoon = Animation;//用户定义函数？
   windowbsp.callback_.windows_message = Event;//用户定义函数？

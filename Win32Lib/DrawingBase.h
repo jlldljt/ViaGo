@@ -11,6 +11,7 @@
 #include <Windows.h>
 #include <Windowsx.h>//GET_X_LPARAM
 
+
 #include"HwndBoard.h"
 #include"GdiPlusTools.h"
 class CDrawingBase
@@ -19,10 +20,10 @@ public:
   CDrawingBase();
   CDrawingBase(void* object, RECT object_rect, RECT rect);
   ~CDrawingBase();
-public:
+protected: // 类外无法访问，派生类可以访问
   CDrawingBoard *board_;
   CDrawingTools *tools_;
-  
+public:  
   /*事件结构体，暂时用Windows的元素，以后可以自己定义一个*/
   enum EnumEvent
   {
@@ -38,7 +39,7 @@ public:
     void* param2;
   };
   //board封装，方便调用
-
+  void EnableTransparent(bool enable = false);
   //tool封装，方便调用
   int AddImage(TCHAR* path);
   int ShowImage(int no);

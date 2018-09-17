@@ -1,138 +1,97 @@
-/*
-*演示win32窗体的建立,演示课本，采用了多字节环境
-*/
 
-#include <Windows.h>
-#include "resource.h"
-#include "test.h"
 
-HINSTANCE _hInst;
-HWND      _hWnd;
-
-char _szAppName[] = "test";
-char _szTitle[]   = "test app";
-//-----------------------------
-//WinMain - where does the program start
-//-----------------------------
-int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, 
-	LPSTR lpCmdLine, int nCmdShow) {
-	MSG msg;
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	if (!hPrevInstance)//在win3.x时代，用来判断是否是第一个实例，现已无用
-		if (!InitApplication(hInstance))
-			return FALSE;
-	if (!InitInstance(hInstance, nCmdShow))
-		return FALSE;
-
-while (GetMessage(&msg, NULL, 0, 0)) {
-	TranslateMessage(&msg);//转换键盘消息
-	DispatchMessage(&msg);//分派消息，通过user模块的协助，送达串口函数wndproc
-}
-return (msg.wParam);  // 传回postquitmessage的参数
+//头文件
+#include"../Win32Lib/WindowBsp.h"
+#include <math.h>
+#include "../Win32Lib/DrawingFactory.h"
+#pragma comment(lib,"../Debug/Win32Lib.lib")
+CDrawingFactory wins;
+//测试消息、动画 接口
+CWindowBsp windowbsp;
+int x_mouse = -1, y_mouse = -1, move = 0;
+HWND main_hwnd, child_hwnd1, child_hwnd2;
+RECT rect;
+POINT pt;
+LRESULT LButtonDown(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+  if (hwnd == main_hwnd) {
+    x_mouse = GET_X_LPARAM(lParam);// LOWORD(lParam);
+    y_mouse = GET_Y_LPARAM(lParam); //HIWORD(lParam);
+    GetClientRect(child_hwnd1, &rect);
+    pt.x = (rect.right + rect.left) >> 1;
+    pt.y = (rect.bottom + rect.top) >> 1;
+    ClientToScreen(child_hwnd1, &pt);
+    ScreenToClient(main_hwnd, &pt);
+    move = 1;
+  }
+  return FALSE;
 }
 
-//-----------------------------
-//InitApplication - a class about register window
-//-----------------------------
-BOOL InitApplication(HINSTANCE hInstance) {
-	WNDCLASS wc = { 0 };
-	wc.style = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc = (WNDPROC)WndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = hInstance;
-	wc.hIcon = NULL;// LoadIcon(hInstance, "basicicon");
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-	wc.lpszMenuName = "TestMenu";
-	wc.lpszClassName = _szAppName;
-	return (RegisterClass(&wc));
+LRESULT Event(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+  if (hwnd == main_hwnd) {
+    return wins.Event(hwnd, message, wParam, lParam);
+  }
+  return FALSE;
 }
-//-----------------------------
-//InitInstance - create window
-//-----------------------------
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
-	_hInst = hInstance;
+#define step_pixel 5 // per tick
 
-	_hWnd = CreateWindow(
-		_szAppName,
-		_szTitle,
-		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		NULL,
-		NULL,
-		hInstance,
-		NULL
-		);
-	if (!_hWnd)
-		return (FALSE);
-
-	ShowWindow(_hWnd, nCmdShow);
-	UpdateWindow(_hWnd);
-	return (TRUE);
+void Animation(DWORD tick) {
+  wins.Animation(tick);//缺省动作
 }
-//-----------------------------
-//InitInstance - create window
-//-----------------------------
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-	int wmId, wmEvent;
 
-	switch (message)
-	{
-	case WM_COMMAND:
-		wmId = LOWORD(wParam);
-		wmEvent = HIWORD(wParam);
-		switch (wmId)
-		{
-		case IDM_ABOUT:
-			DialogBox(_hInst,
-				"AboutBox",
-				hWnd,
-				(DLGPROC)About
-				);
-			break;
-		case IDM_EXIT:
-			DestroyWindow(hWnd);
-			break;
 
-		default:
-			return (DefWindowProc(hWnd, message, wParam, lParam));//Windows默认消息处理函数
-		}
-		break;
 
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+{
+  int				cxScreen, cyScreen;
+  cxScreen = GetSystemMetrics(SM_CXSCREEN);
+  cyScreen = GetSystemMetrics(SM_CYSCREEN);
+  int width = 500;
+  int height = 500;
+  //RECT rect = { (cxScreen - width)/2, (cyScreen - height)/2, (cxScreen + width) / 2, (cyScreen + height) / 2 };
+  RECT rect = { 100, 000, 300, 200 };
+  RECT uprect = { 50, 10, 100, 50 };
 
-	default:
-		return (DefWindowProc(hWnd, message, wParam, lParam));//break;
-	}
-	return(0);
-}
-//-----------------------------
-//About - dialog
-//-----------------------------
-LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
-	UNREFERENCED_PARAMETER(lParam);
+  main_hwnd = windowbsp.CreateBoard(hInstance, L"hello act", rect, NULL);
+  //windowbsp.ChangeIcon(hInstance, main_hwnd, L"pic/9.ico");
+  //为了消息和动画
 
-	switch (message)
-	{
-	case WM_INITDIALOG:
-		return (TRUE);
+  //创建画布及元素
+  wins.Bind(main_hwnd);
+  //TODO:这里有问题
+  wins.Create({ 0,0,200,200 }, CDrawingFactory::_BLANK_);
+  for (int i = 0; i < 10; i++) {
+    InflateRect(&uprect, 1, 1);
+    CDrawingBase *object = wins.Create(uprect, CDrawingFactory::_BUTTON_);
+    TCHAR* img = TEXT("pic/3.PNG");
+    //object->tools_->AddImage(img);
+    object->AddImage(img);
+    //RECT tmp_rect = {0, 0, uprect.right - uprect.left, uprect.bottom - uprect.top};
+    //object->tools_->StretchBlt(tmp_rect, 0);
+    //object->board_->EnableTransparent(true);
 
-	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK
-			|| LOWORD(wParam) == IDCANCEL) {
-			EndDialog(hDlg, TRUE);
-			return (TRUE);
-		}
-		break;
+    object->ShowImage(0);
+    object->EnableTransparent(true);
+  }
 
-	default:
-		break;
-	}
-	return (FALSE);
+  CDrawingBase *object = wins.Create(uprect, CDrawingFactory::_ANIMATION_BUTTON_);
+  TCHAR* img = TEXT("pic/3.PNG");
+  object->AddImage(img);
+  img = TEXT("pic/5.PNG");
+  object->AddImage(img);
+  //RECT tmp_rect = { 0, 0, uprect.right - uprect.left, uprect.bottom - uprect.top };
+  //object->tools_->StretchBlt(tmp_rect, 0);//临时，在这里把img绘制到board上，只绘制一次即可，由于自带缓存，无需每次paint都绘
+  //object->board_->EnableTransparent(true);
+
+  object->ShowImage(0);
+  object->EnableTransparent(false);
+
+  windowbsp.callback_.cartoon = Animation;//用户定义函数？
+  windowbsp.callback_.windows_message = Event;//用户定义函数？
+
+
+  InvalidateRect(main_hwnd, &uprect, 0);
+
+  windowbsp.GameMsgLoop();// .WindowMsgLoop();
+  windowbsp.DestoryBoard(hInstance, L"hello act");
+  return 0;
 }

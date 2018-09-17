@@ -3,6 +3,7 @@
 #include <assert.h>
 
 
+
 CDrawingBase::CDrawingBase()
 {
 }
@@ -16,6 +17,11 @@ CDrawingBase::CDrawingBase(void * object, RECT object_rect, RECT rect)
 
 CDrawingBase::~CDrawingBase()
 {
+}
+
+void CDrawingBase::EnableTransparent(bool enable)
+{
+  board_->EnableTransparent(true);
 }
 
 int CDrawingBase::AddImage(TCHAR * path)
