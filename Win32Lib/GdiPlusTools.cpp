@@ -128,6 +128,8 @@ int CGdiPlusTools::AddImage(TCHAR * path)
       for (j = 0; j<img->GetHeight(); j++)
       {
         byte *pByte = (byte *)img->GetPixelAddress(i, j);
+        if (pByte[3] != 0 && pByte[3] != 255)
+          pByte[3] = 255;
         pByte[0] = pByte[0] * pByte[3] / 255;
         pByte[1] = pByte[1] * pByte[3] / 255;
         pByte[2] = pByte[2] * pByte[3] / 255;
@@ -144,6 +146,8 @@ int CGdiPlusTools::AddImage(TCHAR * path)
       for (j = 0; j<bImg->GetHeight(); j++)
       {
         byte *pByte = (byte *)bImg->GetPixelAddress(i, j);
+        if (pByte[3] != 0 && pByte[3] != 255)
+          pByte[3] = 255;//不透明
         pByte[0] = 255 - pByte[3];
         pByte[1] = 255 - pByte[3];
         pByte[2] = 255 - pByte[3];
@@ -171,7 +175,7 @@ int CGdiPlusTools::StretchBlt(RECT dest, RECT src,int no)
     src.top,
     src.right - src.left,
     src.bottom - src.top,
-    SRCAND);//贴动作背景
+    SRCCOPY/*SRCAND*/);//贴动作背景//SRCAND会导致边缘闪烁？
   imgs_[no]->StretchBlt(
     (HDC)board_,
     dest.left,
@@ -191,32 +195,39 @@ int CGdiPlusTools::StretchBlt(RECT dest, RECT src,int no)
 
 int CGdiPlusTools::StretchBlt(RECT dest, int no)
 {
-  imgs_bg_[no]->StretchBlt(
-    (HDC)board_,
-    dest.left,
-    dest.top,
-    dest.right - dest.left,
-    dest.bottom - dest.top,
-    0,
-    0,
-    imgs_bg_[no]->GetWidth(),
-    imgs_bg_[no]->GetHeight(),
-    SRCAND);//贴动作背景
-  imgs_[no]->StretchBlt(
-    (HDC)board_,
-    dest.left,
-    dest.top,
-    dest.right - dest.left,
-    dest.bottom - dest.top,
-    0,
-    0,
-    imgs_[no]->GetWidth(),
-    imgs_[no]->GetHeight(),
-    SRCPAINT);//贴动作前景
+  RECT src = { 
+      0,
+      0,
+      imgs_bg_[no]->GetWidth(),
+      imgs_bg_[no]->GetHeight() };
 
-  blted_img_ = no;
+  return StretchBlt(dest, src, no);
+  //imgs_bg_[no]->StretchBlt(
+  //  (HDC)board_,
+  //  dest.left,
+  //  dest.top,
+  //  dest.right - dest.left,
+  //  dest.bottom - dest.top,
+  //  0,
+  //  0,
+  //  imgs_bg_[no]->GetWidth(),
+  //  imgs_bg_[no]->GetHeight(),
+  //  SRCAND);//贴动作背景
+  //imgs_[no]->StretchBlt(
+  //  (HDC)board_,
+  //  dest.left,
+  //  dest.top,
+  //  dest.right - dest.left,
+  //  dest.bottom - dest.top,
+  //  0,
+  //  0,
+  //  imgs_[no]->GetWidth(),
+  //  imgs_[no]->GetHeight(),
+  //  SRCPAINT);//贴动作前景
 
-  return 0;
+  //blted_img_ = no;
+
+  //return 0;
 }
 
 int CGdiPlusTools::GetBltedImageNo()
